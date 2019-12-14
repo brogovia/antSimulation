@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="C:/Users/Michel/eclipse-workspace/antSimulation/lib/javafx.web.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Michel/eclipse-workspace/antSimulation/lib/javafx-swt.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Michel/eclipse-workspace/antSimulation/lib/src.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

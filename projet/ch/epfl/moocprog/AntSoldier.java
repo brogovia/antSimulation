@@ -2,12 +2,12 @@ package ch.epfl.moocprog;
 import static ch.epfl.moocprog.app.Context.getConfig;
 import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_HP;
 import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_LIFESPAN;
+import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_SPEED;
 
 public class AntSoldier extends Ant {
 
-	public AntSoldier(ToricPosition pos) {
-		super(pos,getConfig().getInt(ANT_SOLDIER_HP), getConfig().getTime(ANT_SOLDIER_LIFESPAN));
-		// TODO Auto-generated constructor stub
+	public AntSoldier(ToricPosition pos, Uid anthillId) {
+		super(pos,getConfig().getInt(ANT_SOLDIER_HP), getConfig().getTime(ANT_SOLDIER_LIFESPAN), anthillId);
 	}
 
 	@Override
@@ -17,8 +17,7 @@ public class AntSoldier extends Ant {
 
 	@Override
 	public double getSpeed() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getConfig().getDouble(ANT_SOLDIER_SPEED);
 	}
 
 }

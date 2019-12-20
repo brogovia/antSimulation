@@ -2,11 +2,14 @@ package ch.epfl.moocprog;
 import static ch.epfl.moocprog.app.Context.getConfig;
 import static ch.epfl.moocprog.config.Config.ANT_WORKER_HP;
 import static ch.epfl.moocprog.config.Config.ANT_WORKER_LIFESPAN;
+import static ch.epfl.moocprog.config.Config.ANT_WORKER_SPEED;
 
 public class AntWorker extends Ant {
+	
+	private double foodQuantity;
 
-	public AntWorker(ToricPosition pos) {
-		super(pos,getConfig().getInt(ANT_WORKER_HP), getConfig().getTime(ANT_WORKER_LIFESPAN));
+	public AntWorker(ToricPosition pos, Uid anthillId) {
+		super(pos,getConfig().getInt(ANT_WORKER_HP), getConfig().getTime(ANT_WORKER_LIFESPAN),anthillId);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -17,9 +20,19 @@ public class AntWorker extends Ant {
 
 	@Override
 	public double getSpeed() {
-		// TODO Auto-generated method stub
-		return 0;
+		return getConfig().getDouble(ANT_WORKER_SPEED);
 	}
+
+	protected final double getFoodQuantity() {
+		return foodQuantity;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString()+"\n"+String.format("Quantity : %.1f", this.getFoodQuantity());
+	}
+	
+	
 	
 	
 

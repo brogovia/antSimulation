@@ -5,6 +5,7 @@ import static ch.epfl.moocprog.config.Config.*;
 import ch.epfl.moocprog.app.ApplicationInitializer;
 import ch.epfl.moocprog.config.ImmutableConfigManager;
 import java.io.File;
+import java.util.Arrays;
 
 import ch.epfl.moocprog.utils.Time;
 import ch.epfl.moocprog.utils.Vec2d;
@@ -15,6 +16,11 @@ import ch.epfl.moocprog.Environment;
 import ch.epfl.moocprog.Food;
 import ch.epfl.moocprog.Positionable;
 import ch.epfl.moocprog.Termite;
+import static ch.epfl.moocprog.config.Config.PHEROMONE_THRESHOLD;
+import ch.epfl.moocprog.Pheromone;
+
+
+
 public class Main {
 
     public static void main(String[] args) {
@@ -118,6 +124,67 @@ public class Main {
         // la fourmi ne « voit » que f3
         // si l'on n'avait que f4, l'appel suivant retournerait null
         System.out.println(env.getClosestFoodForAnt(worker));
+        
+     // quelques tests pour l'étape 10
+        
+        System.out.println();
+        double minQty = getConfig().getDouble(PHEROMONE_THRESHOLD);
+        Pheromone pher1 = new Pheromone( new ToricPosition(10.,10.), minQty);
+        System.out.print("Pheromone pher1 created with quantity PHEROMONE_THRESHOLD = ");
+        System.out.println( minQty );
+        System.out.println("the position of the pheromone is :" + pher1.getPosition());
+        System.out.println("getQuantity() correctly returns the value " + minQty + " : "
+        + (pher1.getQuantity() == minQty));
+        System.out.print("the quantity of the pheromone is negligible : ");
+        System.out.println(pher1.isNegligible());
+        env = new Environment();
+        env.addPheromone(pher1);
+        env.update(Time.fromSeconds(1.));
+        System.out.print("After one step of evaporation (dt = 1 sec), ");
+        System.out.print(" the quantity of pher1 is ");
+        System.out.println(pher1.getQuantity() + "\n");
+        double offset = minQty / 5.;
+        Pheromone pher2 = new Pheromone( new ToricPosition(20.,20.),
+        getConfig().getDouble(PHEROMONE_THRESHOLD) - offset);
+        System.out.println("Pheromone created with quantity PHEROMONE_THRESHOLD - " + offset);
+        System.out.println("the position of the pheromone is :" + pher2.getPosition());
+        System.out.print("the quantity of the pheromone is negligible : ");
+        System.out.println(pher2.isNegligible() + "\n");
+        env.addPheromone(pher2);
+        System.out.print("The quantities of pheromone in the environment are: ");
+        System.out.println(env.getPheromonesQuantities());
+        env.update(Time.fromSeconds(1.));
+        // toute les quantités deviennent négligeables et doivent être supprimées
+        System.out.print("After one update of the environment, ");
+        System.out.print("the quantities of pheromone in the environment are: ");
+        System.out.println(env.getPheromonesQuantities() + "\n");
+        System.out.println("Finding pheromones around a given position : ");
+        ToricPosition antPosition = new ToricPosition(100., 100.);
+        Pheromone pher3 = new Pheromone(new ToricPosition(105., 105.), 1.0);
+        Pheromone pher4 = new Pheromone(new ToricPosition(95., 95.), 2.0);
+        // cette quantité est trop éloignée (ne doit pas être perçue) :
+        Pheromone pher5 = new Pheromone(new ToricPosition(500., 500.), 4.0);
+        env.addPheromone(pher3);
+        env.addPheromone(pher4);
+        env.addPheromone(pher5);
+        System.out.print("The quantities of pheromone in the environment are: ");
+        
+        System.out.println(env.getPheromonesQuantities());
+        double[] pheromonesAroundPosition =
+        env.getPheromoneQuantitiesPerIntervalForAnt(antPosition, 0.,
+        new double[] {Math.toRadians(-180), Math.toRadians(-100),
+        Math.toRadians(-55), Math.toRadians(-25),
+        Math.toRadians(-10), Math.toRadians(0),
+        Math.toRadians(10), Math.toRadians(25),
+        Math.toRadians(55), Math.toRadians(100),
+        Math.toRadians(180)
+        });
+        System.out.println(Arrays.toString(pheromonesAroundPosition) + "\n");
+        System.out.print("After enough time, no pheromones should be left : ");
+        env.update(Time.fromSeconds(30.));
+        System.out.println(env.getPheromonesQuantities());
+
+
 
 
     }

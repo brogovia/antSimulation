@@ -4,6 +4,7 @@ import static ch.epfl.moocprog.app.Context.getConfig;
 import static ch.epfl.moocprog.config.Config.WORLD_HEIGHT;
 import static ch.epfl.moocprog.config.Config.WORLD_WIDTH;
 import static ch.epfl.moocprog.config.Config.ANT_MAX_PERCEPTION_DISTANCE;
+import static ch.epfl.moocprog.config.Config.ANT_SMELL_MAX_DISTANCE;
 import static ch.epfl.moocprog.utils.Utils.*;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import ch.epfl.moocprog.gfx.EnvironmentRenderer;
 import ch.epfl.moocprog.utils.Time;
+import ch.epfl.moocprog.utils.Vec2d;
 
 
 
@@ -59,7 +61,7 @@ AntWorkerEnvironmentView {
 		Iterator<Pheromone> p = pheromones.iterator();
 		while(p.hasNext()) {
 			Pheromone pheromone = p.next();
-			if(pheromone.isNegligeable()) {
+			if(pheromone.isNegligible()) {
 				p.remove();
 			}
 			else pheromone.update(dt);
@@ -86,6 +88,7 @@ AntWorkerEnvironmentView {
 		foods.forEach(environmentRenderer::renderFood);
 		animals.forEach(environmentRenderer::renderAnimal);
 		anthills.forEach(environmentRenderer::renderAnthill);
+		pheromones.forEach(environmentRenderer::renderPheromone);
 	}
 	
 	
@@ -172,10 +175,43 @@ AntWorkerEnvironmentView {
 		this.pheromones.add(pheromone);	
 	}
 	
-	public List<Double> getPheromoneQuantities(){
+	public List<Double> getPheromonesQuantities(){
 		List<Double> quants = new ArrayList<>(); 
 		this.pheromones.forEach(pheromone -> quants.add(pheromone.getQuantity()));
 		return quants;
+	}
+
+	@Override
+	public double[] getPheromoneQuantitiesPerIntervalForAnt(ToricPosition position, double directionAngleRad, double[] angles) {
+		
+		requireNonNull(angles);
+		
+		double[] T = new double[angles.length];
+		for(Pheromone pheromone:pheromones) {
+			if(!pheromone.isNegligible() && pheromone.getPosition().toricDistance(position) <= getConfig().getDouble(ANT_SMELL_MAX_DISTANCE)) {
+				
+				Vec2d v = position.toricVector(pheromone.getPosition());
+				double beta = v.angle()-directionAngleRad;
+				
+				int closestIndice = 0;
+				for(int i = 0; i<angles.length; i++) {
+					if(closestAngleFrom(angles[i], beta) < (closestAngleFrom(angles[closestIndice], beta))) closestIndice = i;
+				}
+				T[closestIndice]+=pheromone.getQuantity();
+			}
+		}
+		return T;
+	}
+	
+	private static double normalizedAngle(double angle) {
+		while(angle < 0) angle += Math.PI;
+		while(angle >= 2*Math.PI) angle -= Math.PI;
+		return angle;
+	}
+	
+	private static double closestAngleFrom(double angle, double target) {
+		double diff = normalizedAngle(angle - target);
+		return Math.min(diff, 2*Math.PI - diff);
 	}
 
 

@@ -11,7 +11,7 @@ import ch.epfl.moocprog.utils.Vec2d;
 
 public abstract class Animal extends Positionable {
 	
-	final Time nextRotationDelay = getConfig().getTime(ANIMAL_NEXT_ROTATION_DELAY);
+	private final Time nextRotationDelay = getConfig().getTime(ANIMAL_NEXT_ROTATION_DELAY);
 	
 	private double direction;
 	
@@ -51,11 +51,11 @@ public abstract class Animal extends Positionable {
 		return hitpoints;
 	}
 	
-	public Time getLifespan() {
+	public final Time getLifespan() {
 		return lifespan;
 	}
 	
-	public void update(AnimalEnvironmentView env, Time dt) {
+	final public void update(AnimalEnvironmentView env, Time dt) {
 		
 		
 		lifespan.minus(dt.times(getConfig().getDouble(ANIMAL_LIFESPAN_DECREASE_FACTOR)));
@@ -66,9 +66,10 @@ public abstract class Animal extends Positionable {
 				rotate();
 				this.rotationDelay = this.rotationDelay.minus(nextRotationDelay);
 			}
-			//Appel de la methode move() si l'animal est en vie
-			move(dt);
+			this.specificBehaviorDispatch(env, dt);
 		}
+		
+		
 	}
 	
 	protected final void move(Time dt) {
@@ -89,6 +90,8 @@ public abstract class Animal extends Positionable {
 	
 	public abstract double getSpeed();
 	
+	protected abstract void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt);
+	
 	protected RotationProbability computeRotationProbs() {
 		double[] angles = new double[] {-180.00, -100.00, -55.00, -25.00, -10.00, 0.00, 10.00, 25.00, 55.00, 100.00, 180.00};
 		for (int i = 0; i<angles.length;i++) {
@@ -96,6 +99,16 @@ public abstract class Animal extends Positionable {
 		}
 		double[] probabilities = new double[] {0.0000, 0.0000, 0.0005, 0.0010, 0.0050,0.9870,0.0050, 0.0010, 0.0005, 0.0000, 0.0000};
 		return new RotationProbability(angles,probabilities);
+	}
+	
+	public void makeUturn() {
+		double angle = this.getDirection();
+		if(angle + Math.PI > 2*Math.PI) {
+			this.setDirection(this.getDirection()-2*Math.PI);
+		}
+		else {
+			this.setDirection(this.getDirection()+Math.PI);
+		}
 	}
 
 

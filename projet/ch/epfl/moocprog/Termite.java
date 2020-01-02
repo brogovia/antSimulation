@@ -39,6 +39,14 @@ public final class Termite extends Animal {
 	public String toString() {
 		return super.toString();
 	}
+
+
+
+
+	@Override
+	public void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt) {
+		
+	}
 	
 	
 	

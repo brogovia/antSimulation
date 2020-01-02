@@ -6,10 +6,10 @@ import static ch.epfl.moocprog.config.Config.*;
 public final class FoodGenerator {
 	
 	private final Time foodDelay = getConfig().getTime(FOOD_GENERATOR_DELAY);
-	final double min = getConfig().getDouble(NEW_FOOD_QUANTITY_MIN);
-	final double max = getConfig().getDouble(NEW_FOOD_QUANTITY_MAX);
-	final double ww = getConfig().getInt(WORLD_WIDTH);
-	final double wh = getConfig().getInt(WORLD_HEIGHT);
+	static final double min = getConfig().getDouble(NEW_FOOD_QUANTITY_MIN);
+	static final double max = getConfig().getDouble(NEW_FOOD_QUANTITY_MAX);
+	static final double ww = getConfig().getInt(WORLD_WIDTH);
+	static final double wh = getConfig().getInt(WORLD_HEIGHT);
 	
 	private Time time;
 

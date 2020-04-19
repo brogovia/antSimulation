@@ -66,6 +66,7 @@ AntWorkerEnvironmentView {
 			}
 			else pheromone.update(dt);
 		}
+		
 		//Gestion des animaux
 		for(Anthill anthill:anthills){
 			anthill.update(this, dt);
@@ -158,6 +159,10 @@ AntWorkerEnvironmentView {
 	public void selectSpecificBehaviorDispatch(AntSoldier antSoldier, Time dt) {
 		antSoldier.seekForEnemies(this, dt);
 	}
+	
+	public RotationProbability selectComputeRotationProbsDispatch(Ant ant) {
+		return ant.computeRotationProbs(this);
+	}
 
 	protected Anthill getAnthillById(Uid uid) {
 		requireNonNull(uid);
@@ -212,6 +217,12 @@ AntWorkerEnvironmentView {
 	private static double closestAngleFrom(double angle, double target) {
 		double diff = normalizedAngle(angle - target);
 		return Math.min(diff, 2*Math.PI - diff);
+	}
+
+	@Override
+	public void selectAfterMoveDispatch(Ant ant, Time dt) {
+		ant.afterMoveAnt(this, dt);
+		
 	}
 
 

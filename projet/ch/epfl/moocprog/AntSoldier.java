@@ -23,13 +23,12 @@ public class AntSoldier extends Ant {
 	}
 	
 	protected void seekForEnemies(AntEnvironmentView env, Time dt) {
-		this.move(dt);
+		this.move(env, dt);
 	}
 
 	@Override
 	public void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt) {
 		env.selectSpecificBehaviorDispatch(this, dt);
-		
 	}
 
 }

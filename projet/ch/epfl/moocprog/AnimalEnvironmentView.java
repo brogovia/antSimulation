@@ -7,4 +7,8 @@ public interface AnimalEnvironmentView {
 	
 	public void selectSpecificBehaviorDispatch(AntSoldier antSoldier, Time dt);
 	
+	public RotationProbability selectComputeRotationProbsDispatch(Ant ant);
+	
+	public void selectAfterMoveDispatch(Ant ant, Time dt);
+	
 }

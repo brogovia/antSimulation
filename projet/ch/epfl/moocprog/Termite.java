@@ -18,7 +18,6 @@ public final class Termite extends Animal {
 
 	public Termite(ToricPosition pos, int hitpoints, Time lifespan) {
 		super(pos, hitpoints, lifespan);
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -45,6 +44,24 @@ public final class Termite extends Animal {
 
 	@Override
 	public void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt) {
+		
+	}
+
+
+
+
+	@Override
+	protected RotationProbability computeRotationProbsDispatch(AnimalEnvironmentView env) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
+	@Override
+	protected void afterMoveDispatch(AnimalEnvironmentView env, Time dt) {
+		// TODO Auto-generated method stub
 		
 	}
 	

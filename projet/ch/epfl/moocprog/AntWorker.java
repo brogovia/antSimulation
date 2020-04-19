@@ -34,7 +34,7 @@ public class AntWorker extends Ant {
 	}
 	
 	protected void seekForFood(AntWorkerEnvironmentView env, Time dt) {
-		this.move(dt);
+		this.move(env, dt);
 		if(env.getClosestFoodForAnt(this) != null && this.foodQuantity == 0.0) {
 			double foodQuantity = env.getClosestFoodForAnt(this).takeQuantity(getConfig().getDouble(ANT_MAX_FOOD));
 			this.setFoodQuantity(foodQuantity);

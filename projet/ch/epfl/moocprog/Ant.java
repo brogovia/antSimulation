@@ -27,14 +27,34 @@ public abstract class Ant extends Animal {
 		return anthillId;
 	}
 	
+	protected final RotationProbability computeRotationProbs(AntEnvironmentView env) {
+		return this.computeDefaultRotationProbs();
+	}
+	
+	@Override
+	protected final RotationProbability computeRotationProbsDispatch(AnimalEnvironmentView env) {
+		return env.selectComputeRotationProbsDispatch(this);
+	}
+	
+	@Override
+	protected final void afterMoveDispatch(AnimalEnvironmentView env, Time dt) {
+		env.selectAfterMoveDispatch(this, dt);
+	}
+	
 	private final void spreadPheromones(AntEnvironmentView env) {
 		ToricPosition currentPos = this.getPosition();
 		double d = lastPos.toricDistance(currentPos);
 		Vec2d v = lastPos.toricVector(currentPos);
 		for(int i = 0; i < d*densite; i++) {
 			ToricPosition pos_i = lastPos.add(v.scalarProduct(i/(d*densite)));
-			new Pheromone(pos_i, energy);
+			Pheromone pheromone = new Pheromone(pos_i, this.energy);
+			env.addPheromone(pheromone);
+			this.lastPos = currentPos;
 		}		
+	}
+	
+	protected final void afterMoveAnt(AntEnvironmentView env, Time dt) {
+		this.spreadPheromones(env);
 	}
 	
 	

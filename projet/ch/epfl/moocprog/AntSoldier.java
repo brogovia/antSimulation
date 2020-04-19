@@ -11,6 +11,10 @@ public class AntSoldier extends Ant {
 	public AntSoldier(ToricPosition pos, Uid anthillId) {
 		super(pos,getConfig().getInt(ANT_SOLDIER_HP), getConfig().getTime(ANT_SOLDIER_LIFESPAN), anthillId);
 	}
+	
+	public AntSoldier(ToricPosition pos, Uid anthillId, AntRotationProbabilityModel probModel) {
+		super(pos,getConfig().getInt(ANT_SOLDIER_HP), getConfig().getTime(ANT_SOLDIER_LIFESPAN), anthillId, probModel);
+	}
 
 	@Override
 	public void accept(AnimalVisitor visitor, RenderingMedia s) {

@@ -16,19 +16,32 @@ public abstract class Ant extends Animal {
 	private Uid anthillId;
 	
 	private ToricPosition lastPos;
+	
+	private AntRotationProbabilityModel probModel;
 
 	public Ant(ToricPosition pos, int hitpoints, Time lifespan, Uid anthillId) {
 		super(pos, hitpoints, lifespan);
 		this.anthillId=anthillId;
 		this.lastPos = pos;
+		this.probModel = new PheromoneRotationProbabilityModel();
+	}
+	
+	public Ant(ToricPosition pos, int hitpoints, Time lifespan, Uid anthillId, AntRotationProbabilityModel probModel) {
+		super(pos, hitpoints, lifespan);
+		this.anthillId=anthillId;
+		this.lastPos = pos;
+		this.probModel = probModel;
 	}
 
 	protected final Uid getAnthillId() {
 		return anthillId;
 	}
 	
+
 	protected final RotationProbability computeRotationProbs(AntEnvironmentView env) {
-		return this.computeDefaultRotationProbs();
+		//RotationProbability rp = this.computeDefaultRotationProbs();
+		RotationProbability rp = this.probModel.computeRotationProbs(this.computeDefaultRotationProbs(), this.getPosition(), this.getDirection(), env);
+		return rp;
 	}
 	
 	@Override

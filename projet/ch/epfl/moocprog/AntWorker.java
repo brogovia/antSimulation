@@ -14,6 +14,10 @@ public class AntWorker extends Ant {
 	public AntWorker(ToricPosition pos, Uid anthillId) {
 		super(pos,getConfig().getInt(ANT_WORKER_HP), getConfig().getTime(ANT_WORKER_LIFESPAN),anthillId);
 	}
+	
+	public AntWorker(ToricPosition pos, Uid anthillId, AntRotationProbabilityModel probModel) {
+		super(pos,getConfig().getInt(ANT_WORKER_HP), getConfig().getTime(ANT_WORKER_LIFESPAN),anthillId, probModel);
+	}
 
 	@Override
 	public void accept(AnimalVisitor visitor, RenderingMedia s) {

@@ -67,7 +67,7 @@ AntWorkerEnvironmentView {
 			else pheromone.update(dt);
 		}
 		
-		//Gestion des animaux
+		//Gestion des fourmilieres
 		for(Anthill anthill:anthills){
 			anthill.update(this, dt);
 		}

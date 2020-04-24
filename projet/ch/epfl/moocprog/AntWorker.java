@@ -48,7 +48,7 @@ public class AntWorker extends Ant {
 			this.setFoodQuantity(foodQuantity);
 			this.makeUturn();
 		}
-		if(env.dropFood(this)==true) {
+		if(env.dropFood(this)==true && this.foodQuantity != 0.0) {
 			this.setFoodQuantity(0.0);
 			this.makeUturn();
 		}

@@ -2,10 +2,6 @@ package ch.epfl.moocprog;
 import static ch.epfl.moocprog.app.Context.getConfig;
 import static ch.epfl.moocprog.config.Config.TERMITE_SPEED;
 import ch.epfl.moocprog.utils.Time;
-
-import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_ATTACK_DURATION;
-import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_MAX_STRENGTH;
-import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_MIN_STRENGTH;
 import static ch.epfl.moocprog.config.Config.TERMITE_HP;
 import static ch.epfl.moocprog.config.Config.TERMITE_LIFESPAN;
 import static ch.epfl.moocprog.config.Config.TERMITE_ATTACK_DURATION;
@@ -53,9 +49,9 @@ public final class Termite extends Animal {
 		env.selectAfterMoveDispatch(this, dt);	
 	}
 	
-	protected void seekForEnemies(AnimalEnvironmentView env,
-			Time dt) {
+	protected void seekForEnemies(AnimalEnvironmentView env, Time dt) {
 		this.move(env, dt);
+		this.fight(env, dt);
 	}
 	
 	protected RotationProbability computeRotationProbs(TermiteEnvironmentView
@@ -81,7 +77,6 @@ public final class Termite extends Animal {
 	protected boolean isEnemyDispatch(Ant other) {
 		return true;
 	}
-	
 	
 	@Override
 	public int getMinAttackStrength() {

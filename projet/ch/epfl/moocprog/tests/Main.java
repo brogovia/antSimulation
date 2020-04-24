@@ -15,6 +15,7 @@ import ch.epfl.moocprog.Anthill;
 import ch.epfl.moocprog.Environment;
 import ch.epfl.moocprog.Food;
 import ch.epfl.moocprog.Positionable;
+import ch.epfl.moocprog.RotationProbability;
 import ch.epfl.moocprog.Termite;
 import static ch.epfl.moocprog.config.Config.PHEROMONE_THRESHOLD;
 import ch.epfl.moocprog.Pheromone;
@@ -184,7 +185,51 @@ public class Main {
         env.update(Time.fromSeconds(30.));
         System.out.println(env.getPheromonesQuantities());
         
-        //Tests pour l'étape 12
+     // quelques tests pour l'étape 13
+        System.out.println("\nA termite is added to an empty environment:");
+        ToricPosition termitePosition = new ToricPosition(20, 30);
+        Termite termit = new Termite(termitePosition);
+        ToricPosition positionBeforeUpdate = termitePosition;
+        System.out.println("Characteristics of the termite:");
+        System.out.println(termit);
+        env = new Environment();
+        env.addAnimal(termit);
+        env.update(Time.fromSeconds(1.));
+        // on teste si la termite est à nouveau capable de se déplacer
+        boolean hasMoved = !positionBeforeUpdate.equals(termit.getPosition());
+        System.out.print("The termite is now able to move : " );
+        System.out.println(hasMoved + "\n");
+        // on vérifie les probabilités de rotation
+        System.out.println("The rotation probabilities for the termite are:");
+        RotationProbability rotProbs = env.selectComputeRotationProbsDispatch(termit);
+        System.out.println("Angles :" + Arrays.toString(rotProbs.getAngles()));
+        System.out.println("Probabilities : " + Arrays.toString(rotProbs.getProbabilities()));
+        System.out.println();
+        // On vérifie les tests sur les ennemis
+        Termite termit2 = new Termite(termitePosition);
+        env.addAnimal(termit2);
+        System.out.print("Is a termite the ennemy of another termite : ");
+        System.out.println(termit2.isEnemy(termit));
+        Anthill anthill1 = new Anthill(new ToricPosition(10, 20));
+        AntWorker worker1 = new AntWorker(new ToricPosition(22, 28), anthill.getAnthillId());
+        env.addAnimal(worker1);
+        System.out.print("Is a termite the ennemy of a worker ant : ");
+        System.out.println(termit2.isEnemy(worker1));
+        // faire la même choses pour les autres combinaisons possibles
+        // (soldates, fourmis d'une même foumilières etc.)
+        // On vérifie les méthodes permettant la détection d'ennemis:
+        System.out.print("Can the worker ant be seen by an ennemy :");
+        System.out.println(env.isVisibleFromEnemies(worker1));
+        System.out.println("Characteristics of the visible ennemies :");
+        System.out.println(env.getVisibleEnemiesForAnimal(worker1));
+        // à compléter avec d'autres configuration pour les distances
+        // On vérifie les forces et temps d'attaque
+        System.out.println((termit2.getMinAttackStrength()
+        == getConfig().getInt(TERMITE_MIN_STRENGTH)));
+        System.out.println((termit2.getMaxAttackStrength()
+        == getConfig().getInt(TERMITE_MAX_STRENGTH)));
+        System.out.println(termit2.getMaxAttackDuration().equals(
+        getConfig().getTime(TERMITE_ATTACK_DURATION)));
 
 
 

@@ -21,6 +21,8 @@ public abstract class Animal extends Positionable {
 	
 	private Time rotationDelay;
 	
+	private Time attackDuration;
+	
 	public Animal(ToricPosition pos) {
 		super(pos);
 	}
@@ -31,6 +33,7 @@ public abstract class Animal extends Positionable {
 		this.lifespan=lifespan;
 		this.direction = getValue(0, 2*Math.PI);
 		this.rotationDelay = Time.ZERO;
+		this.attackDuration = Time.ZERO;
 	}
 	
 	public final double getDirection() {
@@ -61,7 +64,6 @@ public abstract class Animal extends Positionable {
 	}
 	
 	protected final void move(AnimalEnvironmentView env, Time dt) {
-		
 		this.rotationDelay = this.rotationDelay.plus(dt);
 		if (!isDead()) {
 			while(this.rotationDelay.compareTo(nextRotationDelay) >= 0.0) {
@@ -104,19 +106,32 @@ public abstract class Animal extends Positionable {
 	public void makeUturn() {
 		double angle = this.getDirection();
 		if(angle + Math.PI > 2*Math.PI) {
-			this.setDirection(this.getDirection()-2*Math.PI);
+			this.setDirection(angle-Math.PI);
 		}
 		else {
-			this.setDirection(this.getDirection()+Math.PI);
+			this.setDirection(angle+Math.PI);
 		}
 	}
-
-
 	@Override
 	public String toString() {
 		return super.toString()+"\n"+String.format("Speed : %.1f", this.getSpeed())+"\n"+String.format("Hitpoints : %d", hitpoints)+"\n"+String.format("LifeSpan : %.1f", lifespan.toSeconds());
 	}
 	
+	//DEBUT ETAPE 13
+	
+	protected abstract boolean isEnemy(Animal entity) ;
+	
+	protected abstract boolean isEnemyDispatch(Termite other) ;
+	
+	protected abstract boolean isEnemyDispatch(Ant other) ;
+	
+	protected abstract int getMinAttackStrength();
+	
+	protected abstract int getMaxAttackStrength();
+	
+	protected abstract Time getMaxAttackDuration();
+
+
 	
 
 }

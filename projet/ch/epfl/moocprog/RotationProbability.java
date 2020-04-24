@@ -15,11 +15,11 @@ public class RotationProbability {
 		this.probabilities = probas.clone();
 	}
 
-	protected final double[] getAngles() {
+	public final double[] getAngles() {
 		return angles;
 	}
 
-	protected final double[] getProbabilities() {
+	public final double[] getProbabilities() {
 		return probabilities;
 	}
 

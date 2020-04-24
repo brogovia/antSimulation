@@ -3,6 +3,10 @@ import static ch.epfl.moocprog.app.Context.getConfig;
 import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_HP;
 import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_LIFESPAN;
 import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_SPEED;
+import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_ATTACK_DURATION;
+import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_MAX_STRENGTH;
+import static ch.epfl.moocprog.config.Config.ANT_SOLDIER_MIN_STRENGTH;
+
 
 import ch.epfl.moocprog.utils.Time;
 
@@ -33,6 +37,21 @@ public class AntSoldier extends Ant {
 	@Override
 	public void specificBehaviorDispatch(AnimalEnvironmentView env, Time dt) {
 		env.selectSpecificBehaviorDispatch(this, dt);
+	}
+	
+	@Override
+	protected int getMinAttackStrength() {
+		return getConfig().getInt(ANT_SOLDIER_MIN_STRENGTH);
+	}
+
+	@Override
+	protected int getMaxAttackStrength() {
+		return getConfig().getInt(ANT_SOLDIER_MAX_STRENGTH);
+	}
+
+	@Override
+	protected Time getMaxAttackDuration() {
+		return getConfig().getTime(ANT_SOLDIER_ATTACK_DURATION);
 	}
 
 }

@@ -70,5 +70,20 @@ public abstract class Ant extends Animal {
 		this.spreadPheromones(env);
 	}
 	
+	@Override
+	protected boolean isEnemy(Animal animal) {
+		return !this.isDead() && !animal.isDead() && animal.isEnemyDispatch(this);
+	}
+
+	@Override
+	protected boolean isEnemyDispatch(Termite other) {
+		return true;
+	}
+
+	@Override
+	protected boolean isEnemyDispatch(Ant other) {
+		return !other.anthillId.equals(this.anthillId);
+	}
+	
 	
 }
